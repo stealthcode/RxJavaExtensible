@@ -1,0 +1,23 @@
+.gradle
+classes/
+/build/
+*/build/
+**/dist/
+**/distMaven/
+lib/
+**/*.jar
+junit-*.properties
+junitvmwatcher-*.properties
+## Intellij 
+*.ipr
+*.iws
+*.iml
+**/out/
+.idea/
+### Eclipse ignores
+.project
+.metadata
+.classpath
+.gradle
+bin/
+.settings/
