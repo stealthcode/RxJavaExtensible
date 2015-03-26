@@ -52,5 +52,5 @@ public class SimpleSingleObservable<T> implements SingleObservable<T> {
     public <R1, R2, O extends DualObservable<R1, R2>> O extend(SingleToDualExtendingOperator<O, R1, R2, T> operator) {
         return operator.compose(onSubscribe);
     }
-    
+
 }

@@ -23,4 +23,8 @@ public class CoreOperators {
         return new SimpleExtendingOperator<R, T>(new OperatorScan<R, T>(initialValue, accumulator));
     }
     
+    public static <T, R> SingleExtendingOperator<SimpleSingleObservable<R>, R, T> scan(Func2<R, ? super T, R> accumulator) {
+        return new SimpleExtendingOperator<R, T>(new OperatorScan<R, T>(accumulator));
+    }
+    
 }
