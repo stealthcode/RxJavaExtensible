@@ -3,6 +3,7 @@ package rx.simple;
 import org.junit.Test;
 
 import static rx.simple.operator.CoreOperators.*;
+import static rx.simple.operator.DualOperators.*;
 import static rx.simple.operator.ConversionOperators.*;
 import rx.Subscriber;
 import rx.dual.DualSubscriber;
@@ -51,7 +52,12 @@ public class SimpleSingleObservableTest {
                 sub.onNext(new Integer(i));
             sub.onCompleted();
         })
-        .extend(generate(i -> i.toString()))
+        .extend(
+                generate(i -> i.toString())
+        )
+        .extend(
+                map1((Integer i, String s) -> i * s.length())
+        )
         .subscribe(new DualSubscriber<Integer, String>() {
             @Override
             public void onNext(Integer t1, String t2) {

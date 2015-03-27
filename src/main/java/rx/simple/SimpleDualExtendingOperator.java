@@ -10,7 +10,7 @@ public class SimpleDualExtendingOperator<R1, R2, T1, T2> implements DualExtendin
     
     private DualOperator<R1, R2, T1, T2> operator;
 
-    SimpleDualExtendingOperator(DualOperator<R1, R2, T1, T2> operator) {
+    public SimpleDualExtendingOperator(DualOperator<R1, R2, T1, T2> operator) {
         this.operator = operator;
     }
 

@@ -1,8 +1,9 @@
 package rx.dual;
 
-import rx.Subscriber;
+import rx.Subscription;
 
-public abstract class DualSubscriber<T1, T2> extends Subscriber<T1> implements DualObserver<T1, T2> {
+
+public abstract class DualSubscriber<T1, T2> implements DualObserver<T1, T2>, Subscription {
 
     @Override
     public abstract void onCompleted();
@@ -11,9 +12,20 @@ public abstract class DualSubscriber<T1, T2> extends Subscriber<T1> implements D
     public abstract void onError(Throwable e);
 
     @Override
-    public void onNext(T1 t) {}
+    public abstract void onNext(T1 t1, T2 t2);
+
+    public void onStart() {
+        
+    }
+    
+    @Override
+    public void unsubscribe() {
+        
+    }
 
     @Override
-    public abstract void onNext(T1 t1, T2 t2);
+    public boolean isUnsubscribed() {
+        return false;
+    }
 
 }
