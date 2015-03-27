@@ -1,21 +1,21 @@
 package rx.simple;
 
-import rx.dual.DualExtendingOperator;
+import rx.dual.DualConversion;
 import rx.dual.DualOnSubscribe;
 import rx.dual.DualOperator;
 import rx.dual.DualSubscriber;
 import rx.exceptions.OnErrorNotImplementedException;
 
-public class SimpleDualExtendingOperator<R1, R2, T1, T2> implements DualExtendingOperator<SimpleDualObservable<R1, R2>, R1, R2, T1, T2> {
+public class SimpleDualConversion<R1, R2, T1, T2> implements DualConversion<SimpleDualObservable<R1, R2>, T1, T2> {
     
-    private DualOperator<R1, R2, T1, T2> operator;
+    private DualOperator<? extends R1, ? extends R2, ? super T1, ? super T2> operator;
 
-    public SimpleDualExtendingOperator(DualOperator<R1, R2, T1, T2> operator) {
+    public SimpleDualConversion(DualOperator<? extends R1, ? extends R2, ? super T1, ? super T2> operator) {
         this.operator = operator;
     }
 
     @Override
-    public SimpleDualObservable<R1, R2> compose(DualOnSubscribe<T1, T2> onSubscribe) {
+    public SimpleDualObservable<R1, R2> convert(DualOnSubscribe<T1, T2> onSubscribe) {
         return SimpleDualObservable.create(wrapSubscriber(onSubscribe));
     }
 

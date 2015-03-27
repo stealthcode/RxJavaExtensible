@@ -1,26 +1,27 @@
 package rx.simple;
 
 import rx.Observable.OnSubscribe;
-import rx.Observable.Operator;
 import rx.Subscriber;
+import rx.dual.DualOnSubscribe;
+import rx.dual.DualSubscriber;
+import rx.dual.MonoToDualOperator;
 import rx.exceptions.OnErrorNotImplementedException;
-import rx.single.SingleExtendingOperator;
+import rx.single.MonoConversion;
 
-public class SimpleExtendingOperator<R, T> implements SingleExtendingOperator<SimpleSingleObservable<R>, R, T> {
-    
-    private Operator<R, T> operator;
+public class SimpleMonoToDualConversion<R1, R2, T> implements MonoConversion<SimpleDualObservable<R1, R2>, T> {
+    private MonoToDualOperator<R1, R2, T> operator;
 
-    public SimpleExtendingOperator(Operator<R, T> operator) {
+    public SimpleMonoToDualConversion(MonoToDualOperator<R1, R2, T> operator) {
         this.operator = operator;
     }
 
     @Override
-    public SimpleSingleObservable<R> compose(OnSubscribe<T> onSubscribe) {
-        return SimpleSingleObservable.create(wrapSubscriber(onSubscribe));
+    public SimpleDualObservable<R1, R2> convert(OnSubscribe<T> onSubscribe) {
+        return SimpleDualObservable.create(wrapSubscriber(onSubscribe));
     }
 
-    private OnSubscribe<R> wrapSubscriber(OnSubscribe<T> onSubscribe) {
-        return (Subscriber<? super R> o) -> {
+    private DualOnSubscribe<R1, R2> wrapSubscriber(OnSubscribe<T> onSubscribe) {
+        return (DualSubscriber<? super R1, ? super R2> o) -> {
             try {
                 Subscriber<? super T> st = operator.call(o);
                 try {

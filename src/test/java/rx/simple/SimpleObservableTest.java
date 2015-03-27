@@ -1,19 +1,21 @@
 package rx.simple;
 
+import static rx.simple.operator.ConversionOperators.generate;
+import static rx.simple.operator.CoreOperators.filter;
+import static rx.simple.operator.CoreOperators.map;
+import static rx.simple.operator.CoreOperators.scan;
+import static rx.simple.operator.DualOperators.map1;
+
 import org.junit.Test;
 
-import static rx.simple.operator.CoreOperators.*;
-import static rx.simple.operator.DualOperators.*;
-import static rx.simple.operator.ConversionOperators.*;
 import rx.Subscriber;
 import rx.dual.DualSubscriber;
-import rx.simple.SimpleSingleObservable;
 
-public class SimpleSingleObservableTest {
+public class SimpleObservableTest {
 
     @Test
     public void test() {
-        SimpleSingleObservable.<Integer>create(sub -> {
+        SimpleMonoObservable.<Integer>create(sub -> {
             for (int i = 0; i < 100; i++)
                 sub.onNext(new Integer(i));
             sub.onCompleted();
@@ -47,7 +49,7 @@ public class SimpleSingleObservableTest {
     
     @Test
     public void testConversion() {
-        SimpleSingleObservable.<Integer>create(sub -> {
+        SimpleMonoObservable.<Integer>create(sub -> {
             for (int i = 0; i < 10; i++)
                 sub.onNext(new Integer(i));
             sub.onCompleted();

@@ -2,16 +2,16 @@ package rx.simple.operator;
 
 import rx.Subscriber;
 import rx.dual.DualSubscriber;
-import rx.dual.SingleToDualExtendingOperator;
-import rx.dual.SingleToDualOperator;
+import rx.dual.MonoToDualOperator;
 import rx.functions.Func1;
 import rx.simple.SimpleDualObservable;
-import rx.simple.SimpleSingleToDualExtendingOperator;
+import rx.simple.SimpleMonoToDualConversion;
+import rx.single.MonoConversion;
 
 public class ConversionOperators {
 
-    public static <T1, R1> SingleToDualExtendingOperator<SimpleDualObservable<T1, R1>, T1, R1, T1> generate(Func1<? super T1, ? extends R1> generatorFunc) {
-        return new SimpleSingleToDualExtendingOperator<T1, R1, T1>(new SingleToDualOperator<T1, R1, T1>() {
+    public static <T1, R1> MonoConversion<SimpleDualObservable<T1, R1>, T1> generate(Func1<? super T1, ? extends R1> generatorFunc) {
+        return new SimpleMonoToDualConversion<T1, R1, T1>(new MonoToDualOperator<T1, R1, T1>() {
 
             @Override
             public Subscriber<? super T1> call(DualSubscriber<? super T1, ? super R1> subscriber) {
