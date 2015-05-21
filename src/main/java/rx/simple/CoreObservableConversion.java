@@ -2,6 +2,7 @@ package rx.simple;
 
 import rx.Observable.OnSubscribe;
 import rx.Observable.Operator;
+import rx.Observable;
 import rx.Subscriber;
 import rx.exceptions.OnErrorNotImplementedException;
 import rx.single.MonoConversion;

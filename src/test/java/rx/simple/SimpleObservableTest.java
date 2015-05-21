@@ -1,15 +1,13 @@
 package rx.simple;
 
-import static rx.simple.operator.ConversionOperators.generate;
+import static rx.simple.operator.ConversionOperators.mapToCore;
 import static rx.simple.operator.CoreOperators.filter;
 import static rx.simple.operator.CoreOperators.map;
 import static rx.simple.operator.CoreOperators.scan;
-import static rx.simple.operator.DualOperators.map1;
 
 import org.junit.Test;
 
 import rx.Subscriber;
-import rx.dual.DualSubscriber;
 
 public class SimpleObservableTest {
 
@@ -55,15 +53,13 @@ public class SimpleObservableTest {
             sub.onCompleted();
         })
         .extend(
-                generate(i -> i.toString())
+                mapToCore(i -> i.toString())
         )
-        .extend(
-                map1((Integer i, String s) -> i * s.length())
-        )
-        .subscribe(new DualSubscriber<Integer, String>() {
+        .filter(s -> s.length() > 1)
+        .subscribe(new Subscriber<String>() {
             @Override
-            public void onNext(Integer t1, String t2) {
-                System.out.println("next: ("+t1+", "+t2+")");
+            public void onNext(String t2) {
+                System.out.println("next: ("+t2+")");
             }
 
             @Override

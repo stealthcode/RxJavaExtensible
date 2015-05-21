@@ -8,41 +8,31 @@ import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.internal.operators.OperatorFilter;
 import rx.internal.operators.OperatorMap;
+import rx.internal.operators.OperatorMerge;
 import rx.internal.operators.OperatorScan;
 import rx.single.MonoConversion;
-import rx.single.MonoObservable;
 
-public class CoreObservable<T> extends SimpleMonoObservable<T> {
+public class CoreObservable<T> {
+    protected OnSubscribe<T> onSubscribe;
     
     private CoreObservable(OnSubscribe<T> onSubscribe) {
-        super(onSubscribe);
+        this.onSubscribe = onSubscribe;
     }
 
     public static <T> CoreObservable<T> create(OnSubscribe<T> onSubscribe) {
         return new CoreObservable<T>(onSubscribe);
     }
 
-    @Override
     public void subscribe(Subscriber<T> subscriber) {
-
+        onSubscribe.call(subscriber);
     }
 
-    @Override
     public <R> CoreObservable<R> lift(Operator<? extends R, ? super T> operator) {
-        // TODO Auto-generated method stub
-        return null;
+        return extend(new CoreObservableConversion<R, T>(operator));
     }
 
-    @Override
     public <R, O> O extend(MonoConversion<O, T> operator) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public <R> MonoObservable<? extends R> compose(Func1<? super MonoObservable<? super T>, ? extends MonoObservable<? extends R>> composition) {
-        // TODO Auto-generated method stub
-        return null;
+        return operator.convert(onSubscribe);
     }
 
     public final <R> CoreObservable<R> map(Func1<? super T, ? extends R> func) {
@@ -59,7 +49,12 @@ public class CoreObservable<T> extends SimpleMonoObservable<T> {
 
     public final <R> CoreObservable<R> flatMap(Func1<? super T, ? extends Observable<? extends R>> func) {
 //        return map(func).lift(OperatorMerge.<T>instance(false));
-//        return map(func).extend(new CoreObservableConversion<R, Observable<R>>(OperatorMerge.<T>instance(false)));
+        
+//        return map(func).extend(new MonoConversion<CoreObservable<R>, R>(){
+//
+//            @Override
+//            public CoreObservable<R> convert(OnSubscribe<R> onSubscribe) {
+//            }});
         return null;
     }
 

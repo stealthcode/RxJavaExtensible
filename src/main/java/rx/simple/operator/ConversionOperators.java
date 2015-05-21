@@ -1,21 +1,20 @@
 package rx.simple.operator;
 
+import rx.Observable.Operator;
 import rx.Subscriber;
-import rx.dual.DualSubscriber;
-import rx.dual.MonoToDualOperator;
 import rx.functions.Func1;
-import rx.simple.SimpleDualObservable;
-import rx.simple.SimpleMonoToDualConversion;
+import rx.simple.CoreObservable;
+import rx.simple.CoreObservableConversion;
 import rx.single.MonoConversion;
 
 public class ConversionOperators {
 
-    public static <T1, R1> MonoConversion<SimpleDualObservable<T1, R1>, T1> generate(Func1<? super T1, ? extends R1> generatorFunc) {
-        return new SimpleMonoToDualConversion<T1, R1, T1>(new MonoToDualOperator<T1, R1, T1>() {
+    public static <T, R> MonoConversion<CoreObservable<R>, T> mapToCore(Func1<? super T, ? extends R> mapFunc) {
+        return new CoreObservableConversion<R, T>(new Operator<R, T>() {
 
             @Override
-            public Subscriber<? super T1> call(DualSubscriber<? super T1, ? super R1> subscriber) {
-                return new Subscriber<T1>() {
+            public Subscriber<? super T> call(Subscriber<? super R> subscriber) {
+                return new Subscriber<T>() {
                     @Override
                     public void onCompleted() {
                         subscriber.onCompleted();
@@ -27,10 +26,10 @@ public class ConversionOperators {
                     }
 
                     @Override
-                    public void onNext(T1 t0) {
+                    public void onNext(T t) {
                         try {
-                            R1 t1 = generatorFunc.call(t0);
-                            subscriber.onNext(t0, t1);
+                            R r = mapFunc.call(t);
+                            subscriber.onNext(r);
                         } catch (Throwable e) {
                             subscriber.onError(e);
                         }

@@ -5,11 +5,10 @@ import rx.Observable.Operator;
 import rx.Subscriber;
 import rx.functions.Func1;
 import rx.single.MonoConversion;
-import rx.single.MonoObservable;
 
-public class SimpleMonoObservable<T> implements MonoObservable<T> {
+public class SimpleMonoObservable<T> {
 
-    private OnSubscribe<T> onSubscribe;
+    protected OnSubscribe<T> onSubscribe;
     
     public static <T> SimpleMonoObservable<T> create(OnSubscribe<T> onSubscribe) {
         return new SimpleMonoObservable<T>(onSubscribe);
@@ -19,12 +18,10 @@ public class SimpleMonoObservable<T> implements MonoObservable<T> {
         this.onSubscribe = onSubscribe;
     }
 
-    @Override
     public void subscribe(Subscriber<T> subscriber) {
         onSubscribe.call(subscriber);
     }
 
-    @Override
     public <R> SimpleMonoObservable<R> lift(Operator<? extends R, ? super T> operator) {
         return extend(new SimpleMonoConversion<R, T>(operator));
     }
@@ -33,8 +30,7 @@ public class SimpleMonoObservable<T> implements MonoObservable<T> {
         return operator.convert(onSubscribe);
     }
 
-    @Override
-    public <R> MonoObservable<? extends R> compose(Func1<? super MonoObservable<? super T>, ? extends MonoObservable<? extends R>> transformer) {
+    public <R> SimpleMonoObservable<? extends R> compose(Func1<SimpleMonoObservable<? super T>, SimpleMonoObservable<? extends R>> transformer) {
         return transformer.call(this);
     }
     
